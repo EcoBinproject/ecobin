@@ -1,6 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapScreen extends StatefulWidget {
   @override
@@ -55,7 +57,7 @@ class _MapScreenState extends State<MapScreen> {
       if (locations.isNotEmpty) {
         final targetLocation = locations.first;
         LatLng newPosition =
-        LatLng(targetLocation.latitude, targetLocation.longitude);
+            LatLng(targetLocation.latitude, targetLocation.longitude);
 
         // Aggiorna la posizione della mappa
         _mapController.animateCamera(
@@ -85,7 +87,7 @@ class _MapScreenState extends State<MapScreen> {
         _showErrorSnackbar('Nessun risultato trovato.');
       }
     } catch (e) {
-      _showErrorSnackbar('Errore durante la ricerca.');
+      _showErrorSnackbar('Errore durante la ricerca: ${e.toString()}');
     }
   }
 
@@ -102,8 +104,16 @@ class _MapScreenState extends State<MapScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Mappa e Calendario'),
-        backgroundColor: Colors.green[700],
+        title: Text(
+          'Mappe e Calendario',
+          style: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+            color: Colors.green[700],
+          ),
+        ),
+        backgroundColor: Colors.white,
+        elevation: 0,
       ),
       body: Stack(
         children: [
@@ -223,6 +233,5 @@ class _MapScreenState extends State<MapScreen> {
     );
   }
 }
-
 
 

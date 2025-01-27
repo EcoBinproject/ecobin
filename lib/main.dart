@@ -1,32 +1,56 @@
+import 'package:ecobin/login.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'homepage.dart';
+
 void main() {
   runApp(MaterialApp(
-    home: HomePage(),  // Use HomePage here instead of Main
+    debugShowCheckedModeBanner: false,
+    home: LoginScreen(),
   ));
 }
 
 class Main extends StatelessWidget {
-  final int totalRecycledItems = 150; // Un esempio di dato per il riciclo totale
+  final int totalRecycledItems = 150; // Dato per il riciclo totale
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          SizedBox(height: 20),
-          _buildInteractiveGlobe(),
-          SizedBox(height: 20),
-          _buildEcoBadgeSection(),
-          SizedBox(height: 20),
-          _buildCommunityChallengeSection(),
-        ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'EcoBin Dashboard',
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.green),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        elevation: 0,
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+              horizontal: MediaQuery.of(context).size.width * 0.05),
+          child: Column(
+            children: [
+              SizedBox(height: 20),
+              _buildInteractiveGlobe(context),
+              SizedBox(height: 20),
+              _buildEcoBadgeSection(),
+              SizedBox(height: 20),
+              _buildCommunityChallengeSection(),
+              SizedBox(height: 20),
+              // Aggiungi il blocco per le statistiche personali
+              _buildPersonalStatistics(),
+            ],
+          ),
+        ),
       ),
     );
   }
 
-  Widget _buildInteractiveGlobe() {
+  Widget _buildInteractiveGlobe(BuildContext context) {
+    double textSize = MediaQuery.of(context).size.width > 600
+        ? 22
+        : 18; // Dimensione dinamica del testo
+
     return Container(
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -45,16 +69,18 @@ class Main extends StatelessWidget {
           Text(
             'Il Tuo Impatto sul Pianeta',
             style: TextStyle(
-              fontSize: 22,
+              fontSize: textSize,
               fontWeight: FontWeight.bold,
-              color: Colors.green[767],
+              color: Colors.green[800],
             ),
             textAlign: TextAlign.center,
           ),
           SizedBox(height: 10),
           Lottie.asset(
             'assets/animations/globe_animation.json',
-            height: 200,
+            height: MediaQuery.of(context).size.width > 600
+                ? 250
+                : 200, // Animazione Lottie adattabile
           ),
           SizedBox(height: 10),
           Text(
@@ -95,13 +121,31 @@ class Main extends StatelessWidget {
             ),
           ),
           SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _buildBadge('Salvatore degli Oceani', Icons.water, Colors.blue),
-              _buildBadge('Custode del Verde', Icons.park, Colors.green),
-              _buildBadge('Riduttore di CO₂', Icons.energy_savings_leaf, Colors.orange),
-            ],
+          LayoutBuilder(
+            builder: (context, constraints) {
+              if (constraints.maxWidth < 600) {
+                return Column(
+                  children: [
+                    _buildBadge(
+                        'Salvatore degli Oceani', Icons.water, Colors.blue),
+                    _buildBadge('Custode del Verde', Icons.park, Colors.green),
+                    _buildBadge('Riduttore di CO₂', Icons.energy_savings_leaf,
+                        Colors.orange),
+                  ],
+                );
+              } else {
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    _buildBadge(
+                        'Salvatore degli Oceani', Icons.water, Colors.blue),
+                    _buildBadge('Custode del Verde', Icons.park, Colors.green),
+                    _buildBadge('Riduttore di CO₂', Icons.energy_savings_leaf,
+                        Colors.orange),
+                  ],
+                );
+              }
+            },
           ),
           SizedBox(height: 10),
           Text(
@@ -120,10 +164,17 @@ class Main extends StatelessWidget {
   Widget _buildBadge(String title, IconData icon, Color color) {
     return Column(
       children: [
-        Icon(
-          icon,
-          size: 40,
-          color: color,
+        Container(
+          padding: EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: color.withOpacity(0.2),
+            shape: BoxShape.circle,
+          ),
+          child: Icon(
+            icon,
+            size: 40,
+            color: color,
+          ),
         ),
         SizedBox(height: 5),
         Text(
@@ -189,6 +240,51 @@ class Main extends StatelessWidget {
               color: Colors.green[800],
             ),
           ),
+        ],
+      ),
+    );
+  }
+
+  // Nuovo Widget per le statistiche personali
+  Widget _buildPersonalStatistics() {
+    return Container(
+      padding: EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.green[50],
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.3),
+            blurRadius: 10,
+            offset: Offset(0, 5),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Text(
+            'Statistiche Personali',
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              color: Colors.green[800], // Colore verde per il titolo
+            ),
+          ),
+          SizedBox(height: 10),
+          Text(
+            'Totale Oggetti Riciclati: $totalRecycledItems',
+            style: TextStyle(
+              fontSize: 18,
+              color: Colors.grey[700],
+            ),
+          ),
+          SizedBox(height: 10),
+          LinearProgressIndicator(
+            value: totalRecycledItems / 1000, // Esempio di progressione
+            backgroundColor: Colors.grey[300],
+            valueColor: AlwaysStoppedAnimation<Color>(Colors.green[700]!),
+          ),
+          SizedBox(height: 10),
         ],
       ),
     );

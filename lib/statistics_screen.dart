@@ -1,53 +1,94 @@
 import 'package:flutter/material.dart';
-import 'package:fl_chart/fl_chart.dart';
 
 class StatisticsScreen extends StatelessWidget {
+  final int ecoPoints = 120;
+  final int ecoBadges = 5;
+
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(
-            'Statistiche di Riciclo',
+    return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(70),
+        child: AppBar(
+          elevation: 0,
+          backgroundColor: Colors.white,
+          centerTitle: true,
+          title: Text(
+            'Statistiche Personali',
             style: TextStyle(
-              fontSize: 22,
               fontWeight: FontWeight.bold,
-              color: Colors.green[800],
+              color: Colors.green[700], // Green for the title
+              fontSize: 24,
             ),
           ),
-          SizedBox(height: 20),
-          SizedBox(
-            height: 200,
-            child: PieChart(
-              PieChartData(
-                sections: [
-                  PieChartSectionData(
-                    value: 40,
-                    title: 'Plastica',
-                    color: Colors.green[300],
-                  ),
-                  PieChartSectionData(
-                    value: 30,
-                    title: 'Carta',
-                    color: Colors.blue[300],
-                  ),
-                  PieChartSectionData(
-                    value: 20,
-                    title: 'Vetro',
-                    color: Colors.orange[300],
-                  ),
-                  PieChartSectionData(
-                    value: 10,
-                    title: 'Altro',
-                    color: Colors.yellow[300],
-                  ),
-                ],
+        ),
+      ),
+      body: Padding(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Le tue statistiche ecologiche',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.green[700], // Green color for subtitle
               ),
             ),
+            SizedBox(height: 20),
+            _buildStatisticCard(
+                'Punti Ecologici', ecoPoints.toString(), Colors.green[300]!),
+            SizedBox(height: 10),
+            _buildStatisticCard(
+                'Badges Guadagnati', ecoBadges.toString(), Colors.blue[300]!),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text(
+                'Torna alla Home',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green[700], // Updated parameter
+                padding: EdgeInsets.symmetric(vertical: 12, horizontal: 40),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildStatisticCard(String title, String value, Color color) {
+    return Card(
+      elevation: 5,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: ListTile(
+        contentPadding: EdgeInsets.all(16),
+        title: Text(
+          title,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: color,
+            fontSize: 18,
           ),
-        ],
+        ),
+        trailing: Text(
+          value,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: color,
+            fontSize: 20,
+          ),
+        ),
       ),
     );
   }
