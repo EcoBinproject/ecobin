@@ -38,13 +38,12 @@ dependencies:
   # Librerie aggiuntive
   rive: ^0.13.20
   fl_chart: ^0.70.2
-  google_maps_flutter: ^2.1.1
+  google_maps_flutter: ^2.10.0
   geocoding: ^3.0.0
-  firebase_auth: ^4.8.0
-  firebase_core: ^2.32.0
   google_sign_in: ^6.2.2
-
-
+  url_launcher: ^6.1.7
+  image_picker: ^0.8.6+3
+  shared_preferences: ^2.0.15
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -70,7 +69,8 @@ flutter:
 
   assets:
      - assets/animations/globe_animation.json
-
+     - assets/animations/trophy.json
+     - assets/images/boy.png
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
